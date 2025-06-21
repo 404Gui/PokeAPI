@@ -5,21 +5,46 @@
 </ion-header>
 
 <ion-content class="pokemon-background">
-  <ion-grid>
+  <ion-grid class="pokemon-grid">
     <ion-row>
-      <ion-col size="6" *ngFor="let pokemon of pokemons">
-        <ion-card class="pokemon-card">
-          <img class="pokemon-image" [src]="pokemon.sprites.front_default" alt="{{ pokemon.name }}" />
-          <ion-card-header>
-            <ion-card-title>{{ pokemon.name | titlecase }}</ion-card-title>
-          </ion-card-header>
-          <ion-button class="pokemon-button" expand="full" [routerLink]="['/details', pokemon.name]">
-            Ver detalhes
-          </ion-button>
+      <ion-col size="12" size-md="6" size-lg="4" *ngFor="let pokemon of pokemons">
+        <ion-card class="pokemon-card type-{{ pokemon.types[0].type.name }}">
+          <div class="pokemon-id">#{{ pokemon.id | number: '3.0' }}</div>
+
+          <img class="pokemon-image type-{{ pokemon.types[0].type.name }}" [src]="pokemon.sprites.front_default"
+            alt="{{ pokemon.name }}" />
+
+          <div class="pokemon-name">{{ pokemon.name | titlecase }}</div>
+
+          <div class="pokemon-card-info">
+            <div class="pokemon-attribute">
+              <strong>Weight</strong>
+              {{ pokemon.weight / 10 }} kg
+            </div>
+            <div class="pokemon-attribute">
+              <strong>Height</strong>
+              {{ pokemon.height / 10 }} m
+            </div>
+            <div class="pokemon-attribute">
+              <strong>Type</strong>
+              <span *ngFor="let t of pokemon.types; let last = last">
+                {{ t.type.name | titlecase }}<span *ngIf="!last"> / </span>
+              </span>
+            </div>
+          </div>
+
+          <div class="pokemon-button-wrapper">
+            <ion-button class="pokemon-button" [routerLink]="['/details', pokemon.name]" fill="clear">
+              Ver<br />Detalhes
+            </ion-button>
+          </div>
+
         </ion-card>
       </ion-col>
     </ion-row>
   </ion-grid>
 
-  <ion-button class="load-more-button" expand="block" (click)="loadMore()">Carregar mais</ion-button>
+  <ion-button class="load-more-button" expand="block" (click)="loadMore()">
+    Carregar mais
+  </ion-button>
 </ion-content>

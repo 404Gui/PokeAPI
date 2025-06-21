@@ -27,21 +27,42 @@ export class DetailsPage implements OnInit {
     }
   }
 
-  get typeNames(): string {
-    return this.pokemon?.types?.map((t: any) => t.type.name).join(', ') ?? '';
+  get basicInfo(): { label: string; value: string }[] {
+    if (!this.pokemon) return [];
+
+    return [
+      { label: 'ID', value: String(this.pokemon.id) },
+      { label: 'Altura', value: `${this.pokemon.height / 10} m` },
+      { label: 'Peso', value: `${this.pokemon.weight / 10} kg` },
+      {
+        label: 'Tipos',
+        value: this.pokemon.types.map((t: any) => t.type.name).join(', ')
+      },
+      { label: 'Experiência Base', value: String(this.pokemon.base_experience) }
+    ];
   }
 
-  get abilityNames(): string {
-    return (
-      this.pokemon?.abilities?.map((a: any) => a.ability.name).join(', ') ?? ''
-    );
+  get skillsInfo(): { label: string; value: string }[] {
+    if (!this.pokemon) return [];
+
+    return [
+      {
+        label: 'Habilidades',
+        value: this.pokemon.abilities.map((a: any) => a.ability.name).join(', ')
+      }
+    ];
   }
 
-  get statsFormatted(): string {
-    return (
-      this.pokemon?.stats
-        ?.map((s: any) => `${s.stat.name}: ${s.base_stat}`)
-        .join(', ') ?? ''
-    );
+  get statsInfo(): { label: string; value: string }[] {
+    if (!this.pokemon) return [];
+
+    return this.pokemon.stats.map((s: any) => ({
+      label: s.stat.name.replace('-', ' '),
+      value: String(s.base_stat)
+    }));
+  }
+
+  get primaryType(): string {
+    return this.pokemon?.types?.[0]?.type?.name ?? 'normal';
   }
 }
