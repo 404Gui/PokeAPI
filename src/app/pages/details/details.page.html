@@ -1,13 +1,54 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <ion-title>details</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Detalhes</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">details</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content *ngIf="!isLoading">
+  <ion-card>
+    <img [src]="pokemon.sprites.front_default" alt="{{ pokemon.name }}" />
+    <ion-card-header>
+      <ion-card-title>{{ pokemon.name | titlecase }}</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-list>
+        <ion-item>
+          <ion-label><strong>ID:</strong></ion-label>
+          <ion-text>{{ pokemon.id }}</ion-text>
+        </ion-item>
+        <ion-item>
+          <ion-label><strong>Altura:</strong></ion-label>
+          <ion-text>{{ pokemon.height / 10 }} m</ion-text>
+        </ion-item>
+        <ion-item>
+          <ion-label><strong>Peso:</strong></ion-label>
+          <ion-text>{{ pokemon.weight / 10 }} kg</ion-text>
+        </ion-item>
+        <ion-item>
+          <ion-label><strong>Tipos:</strong></ion-label>
+          <ion-text>{{ typeNames }}</ion-text>
+        </ion-item>
+        <ion-item>
+          <ion-label><strong>Habilidades:</strong></ion-label>
+          <ion-text>{{ abilityNames }}</ion-text>
+        </ion-item>
+        <ion-item>
+          <ion-label><strong>Experiência Base:</strong></ion-label>
+          <ion-text>{{ pokemon.base_experience }}</ion-text>
+        </ion-item>
+        <ion-item>
+          <ion-label><strong>Stats:</strong></ion-label>
+          <ion-text>{{ statsFormatted }}</ion-text>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+</ion-content>
+
+<ion-content *ngIf="isLoading">
+  <ion-spinner name="crescent" class="ion-margin"></ion-spinner>
 </ion-content>
