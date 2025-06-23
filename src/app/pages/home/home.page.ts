@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { PokemonService } from 'src/app/services/pokemon.service';
-import { FavoriteService } from 'src/app/services/favorite.service'; 
+import { FavoriteService } from 'src/app/services/favorite.service';
 
 @Component({
   standalone: false,
@@ -10,43 +10,66 @@ import { FavoriteService } from 'src/app/services/favorite.service';
 })
 export class HomePage implements OnInit {
   pokemons: any[] = [];
-  offset = 0;
-  limit = 20;
+  searchTerm: string = '';
+  isSearching = false;
 
   constructor(
     private pokemonService: PokemonService,
-    private favoriteService: FavoriteService 
+    private favoriteService: FavoriteService
   ) {}
 
   ngOnInit() {
-    this.loadPokemons();
+    this.loadInitialPokemons();
+    this.pokemonService.loadAllPokemonNames().subscribe(); 
   }
 
-  loadPokemons() {
-    this.pokemonService.getPokemons(this.offset, this.limit).subscribe((res) => {
-      const requests = res.results.map((pokemon: any) =>
-        this.pokemonService.getPokemonDetails(pokemon.name)
+  loadInitialPokemons() {
+    this.pokemonService.getPokemons(0, 20).subscribe((res) => {
+      const requests = res.results.map((p: any) =>
+        this.pokemonService.getPokemonDetails(p.name).toPromise()
       );
 
-      Promise.all(requests.map((r: any) => r.toPromise())).then((detailedPokemons) => {
-        this.pokemons = [...this.pokemons, ...detailedPokemons];
+      Promise.all(requests).then((detailed) => {
+        this.pokemons = detailed;
       });
     });
   }
 
   loadMore() {
-    this.offset += this.limit;
-    this.loadPokemons();
+    
   }
 
-  
+  onSearch() {
+    const term = this.searchTerm.trim().toLowerCase();
+
+    if (!term) {
+      this.isSearching = false;
+      this.loadInitialPokemons();
+      return;
+    }
+
+    this.isSearching = true;
+    this.pokemonService
+      .searchPokemonByNameFragment(term)
+      .subscribe((results) => {
+        const limitedResults = results.slice(0, 20); 
+
+        const requests = limitedResults.map((p) =>
+          this.pokemonService.getPokemonDetails(p.name).toPromise()
+        );
+
+        Promise.all(requests).then((detailed) => {
+          this.pokemons = detailed;
+        });
+      });
+  }
+
   isFavorite(name: string): boolean {
     return this.favoriteService.isFavorite(name);
   }
 
-  
   toggleFavorite(name: string, event: Event): void {
-    event.stopPropagation(); 
+    event.stopPropagation();
     this.favoriteService.toggleFavorite(name);
   }
 }
