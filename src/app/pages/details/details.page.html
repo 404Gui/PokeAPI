@@ -10,13 +10,14 @@
 <ion-content *ngIf="!isLoading" class="pokemon-background">
   <ion-card class="pokemon-card pokemon-detail-card">
     <div class="pokemon-detail-image-wrapper">
-      <img [src]="pokemon.sprites.front_default" alt="{{ pokemon.name }}" class="pokemon-image large" />
-      <ion-button expand="block" color="warning" (click)="toggleFavorite()">
-        <ion-icon [name]="isFavorite ? 'star' : 'star-outline'" slot="start"></ion-icon>
-        {{ isFavorite ? 'Remover dos Favoritos' : 'Adicionar aos Favoritos' }}
-      </ion-button>
+      <img [src]="pokemon.sprites.front_default" alt="{{ pokemon.name }}"
+        class="pokemon-image type-{{ pokemon.types[0].type.name }}" />
 
+      <ion-button class="favorite-float-button" fill="clear" (click)="toggleFavorite()">
+        <ion-icon [name]="isFavorite ? 'star' : 'star-outline'" slot="icon-only"></ion-icon>
+      </ion-button>
     </div>
+
 
     <ion-card-header>
       <ion-card-title class="pokemon-name-title">

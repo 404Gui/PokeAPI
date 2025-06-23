@@ -3,9 +3,53 @@
   font-size: 0.9rem;
   font-family: 'Press Start 2P', sans-serif;
   text-transform: uppercase;
-  color: #333;
   margin-bottom: 4px;
 }
+
+.pokemon-detail-card {
+  padding: 1.5rem;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  margin: 1rem;
+}
+
+.pokemon-detail-image-wrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.pokemon-image {
+  width: 180px;
+  height: 180px;
+  object-fit: contain;
+  border-radius: 50%;
+  padding: 16px;
+}
+
+.favorite-float-button {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  --color: #ffcb05;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  z-index: 10;
+  transition: transform 0.2s ease-in-out;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+
+  ion-icon {
+    font-size: 1.4rem;
+  }
+}
+
 
 .pokemon-id {
   font-size: 0.6rem;
