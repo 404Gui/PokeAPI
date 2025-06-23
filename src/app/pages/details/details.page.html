@@ -17,12 +17,35 @@
         <ion-icon [name]="isFavorite ? 'star' : 'star-outline'" slot="icon-only"></ion-icon>
       </ion-button>
     </div>
- 
 
     <ion-card-header>
       <ion-card-title class="pokemon-name-title">
-        {{ pokemon.name | titlecase }} <span class="pokemon-id">#{{ pokemon.id }}</span>
+        {{ pokemon.name | titlecase }}
+        <span class="pokemon-id">#{{ pokemon.id }}</span>
       </ion-card-title>
+
+      <div class="evolution-header-title" *ngIf="evolutionChain && evolutionChain.length > 0">
+        Cadeia de Evolução
+      </div>
+      <div class="evolution-chain-wrapper" *ngIf="evolutionChain && evolutionChain.length > 0">
+        <div class="evolution-container">
+          <ng-container *ngFor="let evo of evolutionChain; let last = last">
+            <ion-button fill="clear" class="evolution-stage-button" [routerLink]="['/details', evo.name]">
+              <div class="evolution-stage">
+                <img [src]="evo.image" [alt]="evo.name" class="evolution-image" />
+                <div class="evolution-name">{{ evo.name | titlecase }}</div>
+              </div>
+            </ion-button>
+
+            <ion-icon *ngIf="!last" name="arrow-forward-outline" class="evolution-arrow"></ion-icon>
+          </ng-container>
+        </div>
+      </div>
+
+
+      <div *ngIf="pokemonDescription" class="pokemon-description-box">
+        {{ pokemonDescription }}
+      </div>
     </ion-card-header>
 
     <ion-card-content>

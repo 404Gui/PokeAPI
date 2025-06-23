@@ -12,7 +12,9 @@ export class PokemonService {
   constructor(private http: HttpClient) {}
 
   getPokemons(offset = 0, limit = 20): Observable<any> {
-    return this.http.get<any>(`${this.baseUrl}/pokemon?offset=${offset}&limit=${limit}`);
+    return this.http.get<any>(
+      `${this.baseUrl}/pokemon?offset=${offset}&limit=${limit}`
+    );
   }
 
   getPokemonDetails(name: string): Observable<any> {
@@ -34,11 +36,34 @@ export class PokemonService {
   }
 
   //* busca parcial pelo nome local do pokemon *//
-  searchPokemonByNameFragment(fragment: string): Observable<{ name: string; url: string }[]> {
+  searchPokemonByNameFragment(
+    fragment: string
+  ): Observable<{ name: string; url: string }[]> {
     const query = fragment.toLowerCase();
     const filtered = this.allPokemonNames.filter((pokemon) =>
       pokemon.name.toLowerCase().includes(query)
     );
     return of(filtered);
+  }
+
+  getPokemonSpecies(name: string): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/pokemon-species/${name}`);
+  }
+
+  getPokemonDescription(name: string): Observable<string | null> {
+    return this.getPokemonSpecies(name).pipe(
+      map((species) => {
+        const entry = species.flavor_text_entries.find(
+          (e: any) => e.language.name === 'en'
+        );
+        return entry
+          ? entry.flavor_text.replace(/\f/g, ' ').replace(/\n/g, ' ')
+          : null;
+      })
+    );
+  }
+
+  getEvolutionChain(url: string): Observable<any> {
+    return this.http.get<any>(url);
   }
 }

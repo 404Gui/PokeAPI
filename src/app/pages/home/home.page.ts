@@ -12,6 +12,8 @@ export class HomePage implements OnInit {
   pokemons: any[] = [];
   searchTerm: string = '';
   isSearching = false;
+  offset = 0;
+  limit = 20;
 
   constructor(
     private pokemonService: PokemonService,
@@ -20,23 +22,37 @@ export class HomePage implements OnInit {
 
   ngOnInit() {
     this.loadInitialPokemons();
-    this.pokemonService.loadAllPokemonNames().subscribe(); 
+    this.pokemonService.loadAllPokemonNames().subscribe();
   }
 
   loadInitialPokemons() {
-    this.pokemonService.getPokemons(0, 20).subscribe((res) => {
-      const requests = res.results.map((p: any) =>
-        this.pokemonService.getPokemonDetails(p.name).toPromise()
-      );
+    this.offset = 0;
+    this.pokemonService
+      .getPokemons(this.offset, this.limit)
+      .subscribe((res) => {
+        const requests = res.results.map((p: any) =>
+          this.pokemonService.getPokemonDetails(p.name).toPromise()
+        );
 
-      Promise.all(requests).then((detailed) => {
-        this.pokemons = detailed;
+        Promise.all(requests).then((detailed) => {
+          this.pokemons = detailed;
+        });
       });
-    });
   }
 
   loadMore() {
-    
+    this.offset += this.limit;
+    this.pokemonService
+      .getPokemons(this.offset, this.limit)
+      .subscribe((res) => {
+        const requests = res.results.map((p: any) =>
+          this.pokemonService.getPokemonDetails(p.name).toPromise()
+        );
+
+        Promise.all(requests).then((detailed) => {
+          this.pokemons = [...this.pokemons, ...detailed];
+        });
+      });
   }
 
   onSearch() {
@@ -52,7 +68,7 @@ export class HomePage implements OnInit {
     this.pokemonService
       .searchPokemonByNameFragment(term)
       .subscribe((results) => {
-        const limitedResults = results.slice(0, 20); 
+        const limitedResults = results.slice(0, 20);
 
         const requests = limitedResults.map((p) =>
           this.pokemonService.getPokemonDetails(p.name).toPromise()

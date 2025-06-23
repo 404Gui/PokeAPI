@@ -14,6 +14,8 @@ export class DetailsPage implements OnInit {
   isLoading = true;
   isFavorite = false;
   pokemonName = '';
+  evolutionChain: { name: string; image: string }[] = [];
+  pokemonDescription: string | null = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -29,9 +31,50 @@ export class DetailsPage implements OnInit {
 
       this.pokemonService.getPokemonDetails(name).subscribe((data) => {
         this.pokemon = data;
+        this.loadEvolutionChain(name);
         this.isLoading = false;
       });
+
+      this.pokemonService.getPokemonDetails(name).subscribe((data) => {
+        this.pokemon = data;
+        this.loadEvolutionChain(name);
+        this.isLoading = false;
+
+        this.pokemonService.getPokemonDescription(name).subscribe((desc) => {
+          this.pokemonDescription = desc;
+        });
+      });
     }
+  }
+
+  loadEvolutionChain(name: string) {
+    this.pokemonService.getPokemonSpecies(name).subscribe((speciesData) => {
+      const evolutionUrl = speciesData.evolution_chain?.url;
+      if (!evolutionUrl) return;
+
+      this.pokemonService
+        .getEvolutionChain(evolutionUrl)
+        .subscribe(async (evoData) => {
+          const chain = evoData.chain;
+          const evolutionList: { name: string; image: string }[] = [];
+
+          let current = chain;
+          while (current) {
+            const evoName = current.species.name;
+            const details = await this.pokemonService
+              .getPokemonDetails(evoName)
+              .toPromise();
+            evolutionList.push({
+              name: evoName,
+              image: details.sprites.front_default,
+            });
+
+            current = current.evolves_to?.[0];
+          }
+
+          this.evolutionChain = evolutionList;
+        });
+    });
   }
 
   get basicInfo(): { label: string; value: string }[] {
@@ -79,13 +122,12 @@ export class DetailsPage implements OnInit {
   }
 
   toggleFavorite() {
-  if (this.isFavorite) {
-    this.favoriteService.removeFavorite(this.pokemonName);
-  } else {
-    this.favoriteService.addFavorite(this.pokemonName);
+    if (this.isFavorite) {
+      this.favoriteService.removeFavorite(this.pokemonName);
+    } else {
+      this.favoriteService.addFavorite(this.pokemonName);
+    }
+
+    this.isFavorite = !this.isFavorite;
   }
-
-  this.isFavorite = !this.isFavorite;
-}
-
 }
