@@ -1,7 +1,6 @@
 .pokemon-name-title {
   text-align: center;
   font-size: 0.9rem;
-  font-family: 'Press Start 2P', sans-serif;
   text-transform: uppercase;
   margin-bottom: 4px;
 }
@@ -14,7 +13,7 @@
 }
 
 .pokemon-detail-image-wrapper {
-  position: relative;
+  position: relative; 
   display: flex;
   justify-content: center;
   align-items: center;
@@ -59,7 +58,6 @@
 }
 
 .info-section-title {
-  font-family: 'Press Start 2P', sans-serif;
   font-size: 0.55rem;
   text-transform: uppercase;
   color: #ffcb05;
@@ -90,7 +88,7 @@
   font-weight: bold;
   min-width: 130px;
   font-size: 0.7rem;
-  font-family: 'Press Start 2P', sans-serif;
+
   text-transform: uppercase;
 }
 
@@ -107,7 +105,6 @@
 }
 
 .info-section-title {
-  font-family: 'Press Start 2P', sans-serif;
   font-size: 0.6rem;
   text-transform: uppercase;
   color: #ffcb05;

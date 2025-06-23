@@ -12,14 +12,18 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
+* {
+  font-family: 'Press Start 2P', sans-serif !important;
+}
+
+
 .pokemon-background {
-  --ion-background-color: linear-gradient(135deg, #78C850, #A7DB8D); // verde grama
+  --ion-background-color: linear-gradient(135deg, #78C850, #A7DB8D);
 }
 
 .pokemon-toolbar {
   --background: #ef5350;
   color: white;
-  font-family: 'Press Start 2P', sans-serif;
 }
 
 $type-colors: (
