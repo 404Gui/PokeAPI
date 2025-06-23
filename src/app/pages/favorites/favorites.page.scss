@@ -77,11 +77,12 @@
       font-weight: 500;
       min-width: 100px;
       transition: all 0.3s ease;
+      font-size: 0.65rem;
 
       strong {
         display: block;
         color: #ffcb05;
-        font-size: 0.85rem;
+        font-size: 0.75rem;
         margin-bottom: 4px;
       }
 
@@ -104,7 +105,6 @@
 
   .pokemon-button,
   .remove-favorite-button {
-    font-family: 'Press Start 2P', sans-serif;
     font-size: 12px;
     letter-spacing: 0.8px;
     padding: 8px 16px;
@@ -145,10 +145,20 @@
 
 .empty-message {
   margin-top: 40vh;
-  text-align: center;
-  font-family: 'Press Start 2P', sans-serif;
   font-size: 1rem;
-  color: #ef5350;
-  padding: 0 1rem;
   opacity: 0.8;
+  padding: 24px;
+  text-align: center;
+  color: #777;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;  
 }
+
+.empty-gif {
+  width: 220px;
+  height: auto;
+  opacity: 0.9;
+}
+

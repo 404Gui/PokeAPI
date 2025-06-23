@@ -9,8 +9,10 @@
 
 <ion-content class="pokemon-background">
   <div *ngIf="pokemons.length === 0 && !isLoading" class="empty-message">
-    Você ainda não tem Pokémon favorito
+    <p>Pokébola vazia!</p>
+    <img src="https://i.gifer.com/XtMd.gif" alt="Pikachu brincando com pokebola" class="empty-gif" />
   </div>
+
 
   <ion-grid *ngIf="pokemons.length > 0">
     <ion-row>

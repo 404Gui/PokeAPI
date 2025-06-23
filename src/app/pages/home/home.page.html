@@ -1,17 +1,18 @@
 <ion-header>
   <ion-toolbar class="pokemon-toolbar">
-    <ion-title>Pokémons</ion-title>
-    <ion-buttons slot="end">
-      <ion-button fill="clear" [routerLink]="['/favorites']">
-        <ion-icon slot="icon-only" name="star"></ion-icon>
+    <div class="toolbar-content">
+      <ion-title>Pokémons</ion-title>
+      <ion-searchbar class="searchbar-custom" [(ngModel)]="searchTerm" (ionInput)="onSearch()"
+        placeholder="Buscar Pokémon" debounce="200">
+      </ion-searchbar>
+      <ion-button fill="clear" [routerLink]="['/favorites']" class="favorites-button">
+        <ion-icon slot="icon-only" name="star" class="favorites-icon"></ion-icon>
       </ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-  <ion-toolbar>
-    <ion-searchbar [(ngModel)]="searchTerm" (ionInput)="onSearch()" placeholder="Buscar Pokémon" debounce="200">
-    </ion-searchbar>
+
+    </div>
   </ion-toolbar>
 </ion-header>
+
 
 <ion-content class="pokemon-background">
   <ion-grid class="pokemon-grid">
@@ -52,6 +53,13 @@
         </ion-card>
       </ion-col>
     </ion-row>
+    <div class="no-results" *ngIf="pokemons.length === 0">
+      <img src="https://i.gifer.com/2iiJ.gif" alt="Pokébola girando" class="no-results-gif" />
+      <p class="no-results-text">
+        Nenhum Pokémon encontrado. Tente capturar outra palavra!
+      </p>
+    </div>
+
   </ion-grid>
 
   <ion-button class="load-more-button" expand="block" (click)="loadMore()" *ngIf="!isSearching">
