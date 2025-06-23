@@ -1,13 +1,61 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>favorites</ion-title>
+<ion-header>
+  <ion-toolbar class="pokemon-toolbar">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Favoritos</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">favorites</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content class="pokemon-background">
+  <div *ngIf="pokemons.length === 0 && !isLoading" class="empty-message">
+    Você ainda não tem Pokémon favorito
+  </div>
+
+  <ion-grid *ngIf="pokemons.length > 0">
+    <ion-row>
+      <ion-col size="12" size-md="6" size-lg="4" *ngFor="let pokemon of pokemons">
+        <ion-card class="pokemon-card type-{{ pokemon.types[0].type.name }}">
+          <div class="pokemon-id">#{{ pokemon.id | number: '3.0' }}</div>
+
+          <img class="pokemon-image type-{{ pokemon.types[0].type.name }}" [src]="pokemon.sprites.front_default"
+            alt="{{ pokemon.name }}" />
+
+          <div class="pokemon-name">{{ pokemon.name | titlecase }}</div>
+
+          <div class="pokemon-card-info">
+            <div class="pokemon-attribute">
+              <strong>Tipo:</strong>
+              <span *ngFor="let t of pokemon.types; let last = last">
+                {{ t.type.name | titlecase }}<span *ngIf="!last"> / </span>
+              </span>
+            </div>
+            <div class="pokemon-attribute">
+              <strong>Peso:</strong> {{ pokemon.weight / 10 }} kg
+            </div>
+            <div class="pokemon-attribute">
+              <strong>Altura:</strong> {{ pokemon.height / 10 }} m
+            </div>
+          </div>
+
+          <div class="pokemon-button-wrapper">
+            <ion-button class="pokemon-button" fill="clear" [routerLink]="['/details', pokemon.name]">
+              Ver Detalhes
+            </ion-button>
+          </div>
+          <div class="pokemon-button-wrapper">
+            <ion-button class="remove-favorite-button" color="danger" fill="outline"
+              (click)="removeFromFavorites(pokemon.name)">
+              Remover
+            </ion-button>
+          </div>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-infinite-scroll threshold="100px" (ionInfinite)="loadNextBatch($event)" *ngIf="hasMore()">
+    <ion-infinite-scroll-content loadingSpinner="bubbles"
+      loadingText="Carregando mais favoritos..."></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
 </ion-content>

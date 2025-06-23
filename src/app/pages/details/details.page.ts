@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { FavoriteService } from 'src/app/services/favorite.service';
 import { PokemonService } from 'src/app/services/pokemon.service';
 
 @Component({
@@ -11,15 +12,21 @@ import { PokemonService } from 'src/app/services/pokemon.service';
 export class DetailsPage implements OnInit {
   pokemon: any;
   isLoading = true;
+  isFavorite = false;
+  pokemonName = '';
 
   constructor(
     private route: ActivatedRoute,
-    private pokemonService: PokemonService
+    private pokemonService: PokemonService,
+    private favoriteService: FavoriteService
   ) {}
 
   ngOnInit() {
     const name = this.route.snapshot.paramMap.get('id');
     if (name) {
+      this.pokemonName = name;
+      this.isFavorite = this.favoriteService.isFavorite(name);
+
       this.pokemonService.getPokemonDetails(name).subscribe((data) => {
         this.pokemon = data;
         this.isLoading = false;
@@ -36,9 +43,12 @@ export class DetailsPage implements OnInit {
       { label: 'Peso', value: `${this.pokemon.weight / 10} kg` },
       {
         label: 'Tipos',
-        value: this.pokemon.types.map((t: any) => t.type.name).join(', ')
+        value: this.pokemon.types.map((t: any) => t.type.name).join(', '),
       },
-      { label: 'Experiência Base', value: String(this.pokemon.base_experience) }
+      {
+        label: 'Experiência Base',
+        value: String(this.pokemon.base_experience),
+      },
     ];
   }
 
@@ -48,8 +58,10 @@ export class DetailsPage implements OnInit {
     return [
       {
         label: 'Habilidades',
-        value: this.pokemon.abilities.map((a: any) => a.ability.name).join(', ')
-      }
+        value: this.pokemon.abilities
+          .map((a: any) => a.ability.name)
+          .join(', '),
+      },
     ];
   }
 
@@ -58,11 +70,22 @@ export class DetailsPage implements OnInit {
 
     return this.pokemon.stats.map((s: any) => ({
       label: s.stat.name.replace('-', ' '),
-      value: String(s.base_stat)
+      value: String(s.base_stat),
     }));
   }
 
   get primaryType(): string {
     return this.pokemon?.types?.[0]?.type?.name ?? 'normal';
   }
+
+  toggleFavorite() {
+  if (this.isFavorite) {
+    this.favoriteService.removeFavorite(this.pokemonName);
+  } else {
+    this.favoriteService.addFavorite(this.pokemonName);
+  }
+
+  this.isFavorite = !this.isFavorite;
+}
+
 }

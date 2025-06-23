@@ -1,6 +1,11 @@
 <ion-header>
   <ion-toolbar class="pokemon-toolbar">
     <ion-title>Pokémons</ion-title>
+    <ion-buttons slot="end">
+      <ion-button fill="clear" [routerLink]="['/favorites']">
+        <ion-icon slot="icon-only" name="star"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -9,6 +14,10 @@
     <ion-row>
       <ion-col size="12" size-md="6" size-lg="4" *ngFor="let pokemon of pokemons">
         <ion-card class="pokemon-card type-{{ pokemon.types[0].type.name }}">
+          <ion-button class="favorite-toggle" fill="clear" size="small"
+            (click)="toggleFavorite(pokemon.name, $event); $event.stopPropagation()">
+            <ion-icon [name]="isFavorite(pokemon.name) ? 'star' : 'star-outline'" slot="icon-only"></ion-icon>
+          </ion-button>
           <div class="pokemon-id">#{{ pokemon.id | number: '3.0' }}</div>
 
           <img class="pokemon-image type-{{ pokemon.types[0].type.name }}" [src]="pokemon.sprites.front_default"
@@ -18,15 +27,15 @@
 
           <div class="pokemon-card-info">
             <div class="pokemon-attribute">
-              <strong>Weight</strong>
+              <strong>Peso</strong>
               {{ pokemon.weight / 10 }} kg
             </div>
             <div class="pokemon-attribute">
-              <strong>Height</strong>
+              <strong>Altura</strong>
               {{ pokemon.height / 10 }} m
             </div>
             <div class="pokemon-attribute">
-              <strong>Type</strong>
+              <strong>Tipo</strong>
               <span *ngFor="let t of pokemon.types; let last = last">
                 {{ t.type.name | titlecase }}<span *ngIf="!last"> / </span>
               </span>
@@ -35,7 +44,7 @@
 
           <div class="pokemon-button-wrapper">
             <ion-button class="pokemon-button" [routerLink]="['/details', pokemon.name]" fill="clear">
-              Ver<br />Detalhes
+              <ion-label>Detalhes</ion-label>
             </ion-button>
           </div>
 

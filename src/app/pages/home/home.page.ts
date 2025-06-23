@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { PokemonService } from 'src/app/services/pokemon.service';
+import { FavoriteService } from 'src/app/services/favorite.service'; 
 
 @Component({
   standalone: false,
@@ -12,7 +13,10 @@ export class HomePage implements OnInit {
   offset = 0;
   limit = 20;
 
-  constructor(private pokemonService: PokemonService) {}
+  constructor(
+    private pokemonService: PokemonService,
+    private favoriteService: FavoriteService 
+  ) {}
 
   ngOnInit() {
     this.loadPokemons();
@@ -33,5 +37,16 @@ export class HomePage implements OnInit {
   loadMore() {
     this.offset += this.limit;
     this.loadPokemons();
+  }
+
+  
+  isFavorite(name: string): boolean {
+    return this.favoriteService.isFavorite(name);
+  }
+
+  
+  toggleFavorite(name: string, event: Event): void {
+    event.stopPropagation(); 
+    this.favoriteService.toggleFavorite(name);
   }
 }
