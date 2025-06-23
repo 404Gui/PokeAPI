@@ -32,8 +32,6 @@
     border-radius: 50%;
     padding: 12px;
     margin-top: 32px;
-    background: white;
-    border: 4px solid #ffcb05;
     object-fit: contain;
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
   }
@@ -189,25 +187,4 @@
 
   border-radius: 50%;
   backdrop-filter: blur(4px);
-}
-
-
-$type-colors: (
-  grass: #78c850,
-  fire: #f08030,
-  water: #6890f0,
-  bug: #a8b820,
-  poison: #a040a0,
-  flying: #a890f0
-);
-
-@each $type, $color in $type-colors {
-  .type-#{$type} {
-    border-color: $color;
-  }
-
-  .pokemon-image.type-#{$type} {
-    border-color: $color;
-    box-shadow: 0 0 12px rgba($color, 0.5);
-  }
 }

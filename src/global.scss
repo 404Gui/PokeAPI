@@ -21,3 +21,26 @@
   color: white;
   font-family: 'Press Start 2P', sans-serif;
 }
+
+$type-colors: (
+  grass: #78c850,
+  fire: #f08030,
+  water: #6890f0,
+  bug: #a8b820,
+  poison: #a040a0,
+  flying: #a890f0,
+  electric: #f7d02c,
+  psychic: #f95587,
+  normal: #a8a878
+);
+
+@each $type, $color in $type-colors {
+  .type-#{$type} {
+    border-color: $color !important;
+  }
+
+  .pokemon-image.type-#{$type} {
+    border-color: $color !important;
+    box-shadow: 0 0 12px rgba($color, 0.5);
+  }
+}
